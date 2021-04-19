@@ -16,7 +16,7 @@ PRIMARY KEY (CookieName)
 CREATE TABLE Storage(
 IngredientName varchar(100),
 StockAmount Integer,
-Unit Integer,
+Unit varchar(10),
 AmountDelivered Integer,
 TimeDelivered DATE,
 PRIMARY KEY(IngredientName)
@@ -26,7 +26,6 @@ CREATE TABLE Recipe(
 Amount Integer,
 CookieName varchar(100),
 IngredientName varchar(100),
-PRIMARY KEY(Amount),
 FOREIGN KEY(CookieName) REFERENCES Cookies(CookieName),
 FOREIGN KEY(IngredientName) REFERENCES Storage(IngredientName)
 );
