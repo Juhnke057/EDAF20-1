@@ -16,8 +16,8 @@ public class Database {
 	private static final String jdbcString = "jdbc:mysql://localhost/krusty";
 
 	// For use with MySQL or PostgreSQL
-	private static final String jdbcUsername = "<CHANGE ME>";
-	private static final String jdbcPassword = "<CHANGE ME>";
+	private static final String jdbcUsername = "localhost";
+	private static final String jdbcPassword = "localhost";
 
 	public void connect() {
 		// Connect to database here
