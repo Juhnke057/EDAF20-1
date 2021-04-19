@@ -1,0 +1,6 @@
+INDEX VERSION 1.4+D:\Dokument\GitHub\EDAF20\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+4134421222.index
+2772817202.index
+1877459979.index
+3087091085.index
+1725005007.index

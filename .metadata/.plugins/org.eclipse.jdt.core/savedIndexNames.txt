@@ -1,0 +1,4 @@
+INDEX VERSION 1.131+D:\Dokument\GitHub\EDAF20\.metadata\.plugins\org.eclipse.jdt.core
+3243304524.index
+3028342151.index
+1877459979.index
