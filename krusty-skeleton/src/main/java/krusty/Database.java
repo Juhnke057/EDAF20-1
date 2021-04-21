@@ -3,6 +3,7 @@ package krusty;
 import spark.Request;
 import spark.Response;
 
+import java.sql.*;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
@@ -17,6 +18,7 @@ public class Database {
 
 	// For use with MySQL or PostgreSQL
 	private static final String jdbcUsername = "localhost";
+	private static final String jdbcUsername = "root";
 	private static final String jdbcPassword = "localhost";
 
 	public void connect() {
@@ -36,11 +38,13 @@ public class Database {
 	public String getCustomers(Request req, Response res) {
 		return "{}";
 	}
+
     public String getCustomers(Request req, Response res) {
         String sql = "SELECT CustomerName AS name, CustomerAddress as address FROM Customer";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             return Jsonizer.toJson(rs, "customers");
+
         } catch (SQLException exception) {
             exception.printStackTrace();
             return Jsonizer.anythingToJson(exception.getMessage(), "status");
