@@ -36,6 +36,16 @@ public class Database {
 	public String getCustomers(Request req, Response res) {
 		return "{}";
 	}
+    public String getCustomers(Request req, Response res) {
+        String sql = "SELECT CustomerName AS name, CustomerAddress as address FROM Customer";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            return Jsonizer.toJson(rs, "customers");
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return Jsonizer.anythingToJson(exception.getMessage(), "status");
+        }
+    }
 
 	public String getRawMaterials(Request req, Response res) {
 		return "{}";
