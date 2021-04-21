@@ -27,6 +27,7 @@ public class Database {
     /**
      * Modify it to fit your environment and then use this string when connecting to your database!
      */
+    private static final String jdbcString = "jdbc:mysql://127.0.0.1:3306/?user=root/krusty?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
     // For use with MySQL or PostgreSQL
     private static final String jdbcUsername = "root";
@@ -46,6 +47,7 @@ public class Database {
 	public String getCustomers(Request req, Response res) {
 		return "{}";
 	}
+    // TODO: Implement and change output in all methods below!
 
     public String getCustomers(Request req, Response res) {
         String sql = "SELECT CustomerName AS name, CustomerAddress as address FROM Customer";
