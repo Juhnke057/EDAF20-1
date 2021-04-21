@@ -22,6 +22,7 @@ public class Database {
 	public void connect() {
 		// Connect to database here
 	}
+    private Connection connection;
     public void connect() {
         try {
             connection = DriverManager.getConnection(jdbcString, jdbcUsername, jdbcPassword);
