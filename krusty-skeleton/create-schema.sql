@@ -65,6 +65,15 @@ Primary Key(OrderNbr, CookieName),
 FOREIGN KEY(CookieName) REFERENCES Cookies(CookieName),
 FOREIGN KEY(OrderNbr) REFERENCES Orders(OrderNbr)
 );
-
+-- fyll databasen för testen 
+INSERT INTO customer(CustomerName, CustomerAddress)
+VALUES("Bjudkakor AB", "Ystad"),
+    ("Finkakor AB", "Helsingborg"),
+    ("Gästkakor AB",  "Hässleholm"),
+     ("Kaffebröd AB", "Landskrona"),
+    ("Kalaskakor AB","Trelleborg"),
+    ("Partykakor AB","Kristianstad"),
+     ("Skånekakor AB","Perstorp"),
+    ("Småbröd AB",  "Malmö");
 
 SET FOREIGN_KEY_CHECKS=1;
