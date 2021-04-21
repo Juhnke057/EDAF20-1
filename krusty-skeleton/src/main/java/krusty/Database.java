@@ -32,7 +32,7 @@ public class Database {
     // TODO: Implement and change output in all methods below!
 
     public String getCustomers(Request req, Response res) {
-        String sql = "SELECT CustomerName AS name, CustomerAddress as address FROM Customer";
+        String sql = "SELECT CustomerName AS name, CustomerAddress as address FROM krusty.Customer";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             return Jsonizer.toJson(rs, "customers");
