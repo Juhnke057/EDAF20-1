@@ -54,7 +54,15 @@ public class Database {
     }
 
     public String getCookies(Request req, Response res) {
-        return "{\"cookies\":[]}";
+        String sql = "SELECT CookieName AS name FROM krusty.cookies";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            return Jsonizer.toJson(rs, "cookies");
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return Jsonizer.anythingToJson(exception.getMessage(), "status");
+        }
+
     }
 
     public String getRecipes(Request req, Response res) {
