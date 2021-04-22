@@ -43,7 +43,14 @@ public class Database {
     }
 
     public String getRawMaterials(Request req, Response res) {
-        return "{}";
+        String sql = "SELECT IngredientName AS name, StockAmount AS amount, Unit AS unit FROM krusty.Storage";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            return Jsonizer.toJson(rs, "raw-materials");
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return Jsonizer.anythingToJson(exception.getMessage(), "status");
+        }
     }
 
     public String getCookies(Request req, Response res) {
