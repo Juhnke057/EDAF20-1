@@ -98,4 +98,13 @@ VALUES("Bread crumbs", 500000,  "g", null, null),
 ("Vanilla sugar",  500000, "g", null, null),
 ("Wheat flour", 500000, "g", null, null);
 
+INSERT INTO Cookies(CookieName)
+VALUES("Almond delight"),
+("Amneris"),
+("Berliner"),
+("Nut cookie"),
+("Nut ring"),
+("Tango")
+;
+
 SET FOREIGN_KEY_CHECKS=1;
