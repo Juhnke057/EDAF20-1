@@ -29,9 +29,7 @@ public class Database {
             exception.printStackTrace();
         }
     }
-
-    // TODO: Implement and change output in all methods below!
-
+    
     public String getCustomers(Request req, Response res) {
         String sql = "SELECT CustomerName AS name, CustomerAddress as address FROM krusty.Customer";
         return executeQuery(sql, "customers");
