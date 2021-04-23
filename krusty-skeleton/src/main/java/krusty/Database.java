@@ -11,15 +11,16 @@ import java.util.TreeMap;
 import static krusty.Jsonizer.toJson;
 
 public class Database {
-    /**
-     * Modify it to fit your environment and then use this string when connecting to your database!
-     */
-    private static final String jdbcString = "jdbc:mysql://127.0.0.1:3306/?user=root/krusty?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
-    // For use with MySQL or PostgreSQL
     private static final String jdbcUsername = "root";
     private static final String jdbcPassword = "localhost";
-    private Connection connection;
+    private static final String hostIp = "127.0.0.1";
+    private static final String hostPort = "3306";
+    private static final String database = "krusty";
+    private static final String timezone = "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static Connection connection;
+
+    private static final String jdbcString = "jdbc:mysql://" + hostIp + ":" + hostPort + "/?user=" + jdbcUsername + "/" + database + timezone;
 
     public void connect() {
         try {
