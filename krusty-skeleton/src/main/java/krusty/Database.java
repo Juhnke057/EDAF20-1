@@ -34,40 +34,31 @@ public class Database {
 
     public String getCustomers(Request req, Response res) {
         String sql = "SELECT CustomerName AS name, CustomerAddress as address FROM krusty.Customer";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ResultSet rs = ps.executeQuery();
-            return Jsonizer.toJson(rs, "customers");
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            return Jsonizer.anythingToJson(exception.getMessage(), "status");
-        }
+        return executeQuery(sql, "customers");
     }
 
     public String getRawMaterials(Request req, Response res) {
         String sql = "SELECT IngredientName AS name, StockAmount AS amount, Unit AS unit FROM krusty.Storage";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ResultSet rs = ps.executeQuery();
-            return Jsonizer.toJson(rs, "raw-materials");
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            return Jsonizer.anythingToJson(exception.getMessage(), "status");
-        }
+        return executeQuery(sql, "raw-materials");
     }
 
     public String getCookies(Request req, Response res) {
         String sql = "SELECT CookieName AS name FROM krusty.cookies";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ResultSet rs = ps.executeQuery();
-            return Jsonizer.toJson(rs, "cookies");
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            return Jsonizer.anythingToJson(exception.getMessage(), "status");
-        }
-
+        return executeQuery(sql, "cookies");
     }
 
     public String getRecipes(Request req, Response res) {
         return "{}";
+    }
+
+    private static String executeQuery(String sql_query, String table_name) {
+        try (PreparedStatement ps = connection.prepareStatement(sql_query)) {
+            ResultSet rs = ps.executeQuery();
+            return Jsonizer.toJson(rs, table_name);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return Jsonizer.anythingToJson(exception.getMessage(), "status");
+        }
     }
 
     public String getPallets(Request req, Response res) {
