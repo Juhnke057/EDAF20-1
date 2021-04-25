@@ -46,7 +46,8 @@ public class Database {
     }
 
     public String getRecipes(Request req, Response res) {
-        return "{}";
+        String sql = "SELECT CookieName AS name FROM krusty.Recipe";
+        return executeQuery(sql, "Recipe");
     }
 
     private static String executeQuery(String sql_query, String table_name) {
