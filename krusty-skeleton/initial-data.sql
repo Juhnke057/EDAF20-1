@@ -36,3 +36,9 @@ VALUES("Almond delight"),
 ("Nut cookie"),
 ("Nut ring"),
 ("Tango");
+
+INSERT INTO Recipe(CookieName, IngredientName, Amount, Unit)
+VALUES("Amneris", "Butter",  "250", "g"),
+("Amneris", "Marzipan",  "750", "g"),
+("Berliner", "Flour","350", "g"),
+("Berliner", "Butter","250","g");
