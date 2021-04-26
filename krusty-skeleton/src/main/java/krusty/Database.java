@@ -28,7 +28,7 @@ public class Database {
             exception.printStackTrace();
         }
     }
-    
+
     public String getCustomers(Request req, Response res) {
         String sql = "SELECT CustomerName AS name, CustomerAddress as address FROM krusty.Customer";
         return executeQuery(sql, "customers");
@@ -45,8 +45,10 @@ public class Database {
     }
 
     public String getRecipes(Request req, Response res) {
-        String sql = "SELECT CookieName AS name, IngredientName, Amount, Unit FROM krusty.Recipe";
-        return executeQuery(sql, "Recipe");
+        String sql = "SELECT CookieName AS cookie, Recipe.IngredientName AS raw_material, Amount AS amount, Storage.Unit AS unit\n" +
+                "FROM krusty.Recipe\n" +
+                "INNER JOIN krusty.Storage ON Recipe.IngredientName = Storage.IngredientName";
+        return executeQuery(sql, "recipes");
     }
 
     private static String executeQuery(String sql_query, String table_name) {
