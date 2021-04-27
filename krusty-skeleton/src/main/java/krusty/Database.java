@@ -8,10 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
 
-import java.util.List;
 
 public class Database {
 
@@ -70,32 +67,29 @@ public class Database {
     }
 
     public String reset(Request req, Response res) throws IOException, SQLException {
-        List<String> listOfTables = List.of("Customer", "Cookies", "Storage", "Recipe", "Pallets");
-        setForeignKeyCheck("0");
-        for (String table : listOfTables) {
-            truncateTable(table);
-            insertInto(table);
-        }
-        setForeignKeyCheck("1");
+        setForeignKeyCheck(false);
+        truncateTables();
+        insertDataIntoTables();
+        setForeignKeyCheck(true);
         return Jsonizer.anythingToJson("status", "ok");
     }
 
-    private void insertInto(String table) throws SQLException {
-        if (!table.equals("Pallets")) { // vi vill bara trunkera "Pallets" och inte fylla
-            connection.createStatement().execute(readFile("reset-" + table + ".sql"));
+    private void setForeignKeyCheck(boolean on) throws SQLException {
+        connection.createStatement().executeQuery(
+                "SET FOREIGN_KEY_CHECKS = " + (on ? "1" : "0") + ";"
+        );
+    }
+
+    private void truncateTables() throws SQLException {
+        for (String table : Arrays.asList("Customer", "Cookies", "Storage", "Recipe", "Pallets")) {
+            connection.createStatement().executeUpdate("TRUNCATE TABLE krusty." + table + ";");
         }
     }
 
-    private void setForeignKeyCheck(String s) throws SQLException {
-        connection.createStatement().executeQuery(
-                "SET FOREIGN_KEY_CHECKS = " + s + ";"
-        );
-    }
-
-    private void truncateTable(String table) throws SQLException {
-        connection.createStatement().executeUpdate(
-                "TRUNCATE TABLE krusty." + table + ";"
-        );
+    private void insertDataIntoTables() throws SQLException {
+        for (String table : Arrays.asList("Customer", "Cookies", "Storage", "Recipe")) {
+            connection.createStatement().execute(readFile("reset-" + table + ".sql"));
+        }
     }
 
     private String readFile(String file) {
