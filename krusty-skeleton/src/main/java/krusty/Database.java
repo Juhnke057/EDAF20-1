@@ -51,10 +51,10 @@ public class Database {
         return executeQuery(sql, "recipes");
     }
 
-    private static String executeQuery(String sql_query, String table_name) {
-        try (PreparedStatement ps = connection.prepareStatement(sql_query)) {
+    private static String executeQuery(String sql, String table) {
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
-            return Jsonizer.toJson(rs, table_name);
+            return Jsonizer.toJson(rs, table);
         } catch (SQLException exception) {
             exception.printStackTrace();
             return Jsonizer.anythingToJson(exception.getMessage(), "status");
