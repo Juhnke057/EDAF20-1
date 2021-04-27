@@ -3,11 +3,15 @@ package krusty;
 import spark.Request;
 import spark.Response;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
+import java.util.List;
 
 public class Database {
 
@@ -65,11 +69,46 @@ public class Database {
         return "{\"pallets\":[]}";
     }
 
-    public String reset(Request req, Response res) {
-        return "{}";
+    public String reset(Request req, Response res) throws IOException, SQLException {
+        List<String> listOfTables = List.of("Customer", "Cookies", "Storage", "Recipe", "Pallets");
+        setForeignKeyCheck("0");
+        for (String table : listOfTables) {
+            truncateTable(table);
+            insertInto(table);
+        }
+        setForeignKeyCheck("1");
+        return Jsonizer.anythingToJson("status", "ok");
+    }
+
+    private void insertInto(String table) throws SQLException {
+        if (!table.equals("Pallets")) { // vi vill bara trunkera "Pallets" och inte fylla
+            connection.createStatement().execute(readFile("reset-" + table + ".sql"));
+        }
+    }
+
+    private void setForeignKeyCheck(String s) throws SQLException {
+        connection.createStatement().executeQuery(
+                "SET FOREIGN_KEY_CHECKS = " + s + ";"
+        );
+    }
+
+    private void truncateTable(String table) throws SQLException {
+        connection.createStatement().executeUpdate(
+                "TRUNCATE TABLE krusty." + table + ";"
+        );
+    }
+
+    private String readFile(String file) {
+        try {
+            String path = "krusty-skeleton/" + file;
+            return new String(Files.readAllBytes(Paths.get(path)));
+        } catch (IOException exception) {
+            return exception.getMessage();
+        }
     }
 
     public String createPallet(Request req, Response res) {
         return "{}";
     }
+
 }
