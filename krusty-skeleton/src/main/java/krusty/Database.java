@@ -94,7 +94,7 @@ public class Database {
 
     private String readFile(String file) {
         try {
-            String path = "krusty-skeleton/" + file;
+            String path = "krusty-skeleton/src/main/resources/" + file;
             return new String(Files.readAllBytes(Paths.get(path)));
         } catch (IOException exception) {
             return exception.getMessage();
