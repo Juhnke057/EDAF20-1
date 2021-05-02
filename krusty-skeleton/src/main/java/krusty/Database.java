@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class Database {
 
     private static final String jdbcUsername = "root";
-    private static final String jdbcPassword = "jkd218100";
+    private static final String jdbcPassword = "localhost";
     private static final String hostIp = "127.0.0.1";
     private static final String hostPort = "3306";
     private static final String database = "krusty";
@@ -105,7 +105,7 @@ public class Database {
             String cookie = req.queryParams("cookie");
             return createPallet(cookie);
         } else{
-            return "{}";
+            return null;
         }
     }
     protected String createPallet(String cookie) throws SQLException {
@@ -114,7 +114,299 @@ public class Database {
         PreparedStatement st = connection.prepareStatement(sql);
         st.setString(1,cookie);
         st.executeUpdate();
+        updateFlourAmount(cookie);
+        updateButterAmount(cookie);
+        updateIcingSugar(cookie);
+        updateRoastedChoppedNuts(cookie);
+        updateFineGroundNuts(cookie);
+        updateGroundRoastedNuts(cookie);
+        updateBreadCrumbs(cookie);
+        updateSugarAmount(cookie);
+        updateEggWhitesAmount(cookie);
+        updateChocolateAmount(cookie);
+        updateMarzipanAmount(cookie);
+        updateEggsAmount(cookie);
+        updatePotatoStarchAmount(cookie);
+        updateWheatFlourAmount(cookie);
+        updateSodiumBicarbonateAmount(cookie);
+        updateVanillaAmount(cookie);
+        updateChoppedAlmonds(cookie);
+        updateCinnamonAmount(cookie);
+        updateVanillaSugarAmount(cookie);
         return executeQuery(sql2,"pallets");
     }
 
+    private void updateVanillaSugarAmount(String cookie) throws SQLException {
+        if(cookie.equals("Berliner")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 5*54 \n" +
+                    "WHERE IngredientName = 'Vanilla sugar'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateCinnamonAmount(String cookie) throws SQLException {
+        if(cookie.equals("Almond delight")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 10*54 \n" +
+                    "WHERE IngredientName = 'Cinnamon'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateChoppedAlmonds(String cookie) throws SQLException {
+        if(cookie.equals("Almond delight")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 279*54 \n" +
+                    "WHERE IngredientName = 'Chopped almonds'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateVanillaAmount(String cookie) throws SQLException {
+        if(cookie.equals("Tango")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 2*54 \n" +
+                    "WHERE IngredientName = 'Vanilla'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateSodiumBicarbonateAmount(String cookie) throws SQLException {
+        if(cookie.equals("Tango")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 4*54 \n" +
+                    "WHERE IngredientName = 'Sodium bicarbonate'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateWheatFlourAmount(String cookie) throws SQLException {
+        if(cookie.equals("Amneris")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 25*54 \n" +
+                    "WHERE IngredientName = 'Wheat flour'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updatePotatoStarchAmount(String cookie) throws SQLException {
+        if(cookie.equals("Amneris")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 25*54 \n" +
+                    "WHERE IngredientName = 'Potato starch'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateEggsAmount(String cookie) throws SQLException {
+        if(cookie.equals("Amneris")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 250*54 \n" +
+                    "WHERE IngredientName = 'Eggs'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+        if(cookie.equals("Berliner")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 50*54 \n" +
+                    "WHERE IngredientName = 'Eggs'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateMarzipanAmount(String cookie) throws SQLException {
+        if(cookie.equals("Amneris")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 750*54 \n" +
+                    "WHERE IngredientName = 'Marzipan'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateChocolateAmount(String cookie) throws SQLException {
+        if(cookie.equals("Nut cookie")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 50*54 \n" +
+                    "WHERE IngredientName = 'Chocolate'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+        if(cookie.equals("Berliner")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 50*54 \n" +
+                    "WHERE IngredientName = 'Chocolate'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateEggWhitesAmount(String cookie) throws SQLException {
+        if(cookie.equals("Nut cookie")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 3,5*54 \n" +
+                    "WHERE IngredientName = 'Egg Whites'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateSugarAmount(String cookie) throws SQLException {
+        if(cookie.equals("Nut cookie")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 375*54 \n" +
+                    "WHERE IngredientName = 'Sugar'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+        if(cookie.equals("Tango")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 250*54 \n" +
+                    "WHERE IngredientName = 'Sugar'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+        if(cookie.equals("Almond delight")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 270*54 \n" +
+                    "WHERE IngredientName = 'Sugar'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateBreadCrumbs(String cookie) throws SQLException {
+        if(cookie.equals("Nut cookie")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 125*54 \n" +
+                    "WHERE IngredientName = 'Bread crumbs'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateGroundRoastedNuts(String cookie) throws SQLException {
+        if(cookie.equals("Nut cookie")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 625*54 \n" +
+                    "WHERE IngredientName = 'Ground, roasted nuts'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateFineGroundNuts(String cookie) throws SQLException {
+        if(cookie.equals("Nut cookie")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 750*54 \n" +
+                    "WHERE IngredientName = 'Fine-ground nuts'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateRoastedChoppedNuts(String cookie) throws SQLException {
+        if(cookie.equals("Nut ring")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 225*54 \n" +
+                    "WHERE IngredientName = 'Roasted, chopped nuts'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateIcingSugar(String cookie) throws SQLException {
+        if(cookie.equals("Nut ring")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 190*54 \n" +
+                    "WHERE IngredientName = 'Icing sugar'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+        if(cookie.equals("Berliner")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 100*54 \n" +
+                    "WHERE IngredientName = 'Icing sugar'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateButterAmount(String cookie) throws SQLException {
+        if(cookie.equals("Nut ring")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 450*54 \n" +
+                    "WHERE IngredientName = 'Butter'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+        else if(cookie.equals("Amneris")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 250*54 \n" +
+                    "WHERE IngredientName = 'Butter'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+        else if(cookie.equals("Tango")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 200*54 \n" +
+                    "WHERE IngredientName = 'Butter'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+        else if(cookie.equals("Almond delight")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 400*54 \n" +
+                    "WHERE IngredientName = 'Butter'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+        else if(cookie.equals("Berliner")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 250*54 \n" +
+                    "WHERE IngredientName = 'Butter'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
+    private void updateFlourAmount(String cookie) throws SQLException {
+        if(cookie.equals("Nut ring")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 450*54 \n" +
+                    "WHERE IngredientName = 'Flour'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+        if(cookie.equals("Almond delight")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 400*54 \n" +
+                    "WHERE IngredientName = 'Flour'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+        if(cookie.equals("Tango")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 300*54 \n" +
+                    "WHERE IngredientName = 'Flour'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+        if(cookie.equals("Berliner")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 350*54 \n" +
+                    "WHERE IngredientName = 'Flour'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
 }
