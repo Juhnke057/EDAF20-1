@@ -105,7 +105,7 @@ public class Database {
             String cookie = req.queryParams("cookie");
             return createPallet(cookie);
         } else{
-            return null;
+            return "{}";
         }
     }
     protected String createPallet(String cookie) throws SQLException {
