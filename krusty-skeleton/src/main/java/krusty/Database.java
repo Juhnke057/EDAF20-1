@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class Database {
 
     private static final String jdbcUsername = "root";
-    private static final String jdbcPassword = "localhost";
+    private static final String jdbcPassword = "jkd218100";
     private static final String hostIp = "127.0.0.1";
     private static final String hostPort = "3306";
     private static final String database = "krusty";
