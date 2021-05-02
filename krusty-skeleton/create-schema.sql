@@ -23,9 +23,9 @@ PRIMARY KEY(IngredientName)
 );
 
 CREATE TABLE Recipe(
-Amount Integer,
 CookieName varchar(100),
 IngredientName varchar(100),
+Amount Integer,
 FOREIGN KEY(CookieName) REFERENCES Cookies(CookieName),
 FOREIGN KEY(IngredientName) REFERENCES Storage(IngredientName)
 );
