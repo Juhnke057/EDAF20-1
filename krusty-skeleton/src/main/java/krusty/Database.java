@@ -101,21 +101,8 @@ public class Database {
         }
     }
 
-    public String createPallet(Request req, Response res) throws SQLException {
-        if (req.queryParams("cookie") != null) {
-            String cookie = req.queryParams("cookie");
-            return createPallet(cookie);
-        } else{
-            return "{}";
-        }
-    }
-    protected String createPallet(String cookie) throws SQLException {
-        String sql2 = "SELECT CookieName AS Cookie FROM krusty.Pallets";
-        String sql = "INSERT INTO krusty.Pallets(CookieName) VALUES(?)";
-        PreparedStatement st = connection.prepareStatement(sql);
-        st.setString(1,cookie);
-        st.executeUpdate();
-        return executeQuery(sql2,"pallets");
+    public String createPallet(Request req, Response res) {
+        return "{}";
     }
 
 }
