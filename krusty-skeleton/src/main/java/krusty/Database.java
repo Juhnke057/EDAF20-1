@@ -260,6 +260,16 @@ public class Database {
         }
     }
 
+    private void updateBreadCrumbs(String cookie) throws SQLException {
+        if(cookie.equals("Nut cookie")){
+            String sql = "UPDATE krusty.Storage\n" +
+                    "SET StockAmount = StockAmount - 125*54 \n" +
+                    "WHERE IngredientName = 'Bread crumbs'";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.executeUpdate();
+        }
+    }
+
     private void updateSugarAmount(String cookie) throws SQLException {
         if(cookie.equals("Nut cookie")){
             String sql = "UPDATE krusty.Storage\n" +
@@ -279,16 +289,6 @@ public class Database {
             String sql = "UPDATE krusty.Storage\n" +
                     "SET StockAmount = StockAmount - 270*54 \n" +
                     "WHERE IngredientName = 'Sugar'";
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.executeUpdate();
-        }
-    }
-
-    private void updateBreadCrumbs(String cookie) throws SQLException {
-        if(cookie.equals("Nut cookie")){
-            String sql = "UPDATE krusty.Storage\n" +
-                    "SET StockAmount = StockAmount - 125*54 \n" +
-                    "WHERE IngredientName = 'Bread crumbs'";
             PreparedStatement st = connection.prepareStatement(sql);
             st.executeUpdate();
         }
