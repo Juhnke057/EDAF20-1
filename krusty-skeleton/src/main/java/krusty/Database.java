@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,8 +67,63 @@ public class Database {
     }
 
     public String getPallets(Request req, Response res) {
-        return "{\"pallets\":[]}";
+        String sql = "SELECT PalletNbr AS id, CookieName AS cookie,TimeProduced AS production_date,CustomerName AS customer, IF(BlockedOrNot, 'yes', 'no') AS blocked\n" +
+                "FROM krusty.Pallets\n" +
+                "LEFT JOIN krusty.Orders ON Pallets.PalletNbr = Orders.PalletNbr\n" +
+                "LEFT JOIN Customer ON Orders.CustomerName = Customer.CustomerName";
+
+        ArrayList<String> list = new ArrayList<>();
+        String json = "";
+        String from = req.queryParams("from");
+        String cookie = req.queryParams("cookie");
+        String to = req.queryParams("to");
+        String blocked = req.queryParams("blocked");
+
+        if (to != null || from != null || cookie != null || blocked != null) {
+            sql += "WHERE ";
+        }
+        if (to != null) {
+            if (list.size() > 0) {
+                sql += "AND ";
+                sql += "production_date <= ? ";
+                list.add(to);
+            }
+        }
+        if (from != null) {
+            sql = "production_date >= ? ";
+            list.add(from);
+        }
+        if (cookie != null) {
+            if (list.size() > 0) {
+                sql += "AND ";
+                sql += "cookie = ? ";
+                list.add(cookie);
+            }
+        }
+        if (blocked != null) {
+            if (list.size() > 0)
+                sql += "AND ";
+            sql += "blocked = ? ";
+            list.add(blocked);
+        }
+       //  return executeQuery(sql, "pallets");
+        //}
+      try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            for (int i = 0; i < list.size(); i++) {
+                ps.setString(i + 1, list.get(i));
+            }
+            ResultSet rs = ps.executeQuery();
+            return Jsonizer.toJson(rs, "pallets");
+        } catch (SQLException e) {
+            System.err.println(e);
+            e.printStackTrace();
+            return  Jsonizer.anythingToJson("error", "status");
+        }
+
     }
+
+
 
     public String reset(Request req, Response res) throws IOException, SQLException {
         setForeignKeyCheck(false);
