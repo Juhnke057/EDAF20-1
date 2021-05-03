@@ -123,8 +123,6 @@ public class Database {
 
     }
 
-
-
     public String reset(Request req, Response res) throws IOException, SQLException {
         setForeignKeyCheck(false);
         truncateTables();
@@ -177,9 +175,8 @@ public class Database {
     }
 
     private String createPallet(String CookieName) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO krusty.Pallets(TimeProduced,CookieName) VALUES(?, ?)", Statement.RETURN_GENERATED_KEYS);
-        ps.setString(1, LocalDateTime.now().toString());
-        ps.setString(2, CookieName);
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO krusty.Pallets(TimeProduced,CookieName) VALUES(NOW(), ?)"  , Statement.RETURN_GENERATED_KEYS);
+        ps.setString(1, CookieName);
         ps.executeUpdate();
         int palletId = 0;
         ResultSet generatedKeys = ps.getGeneratedKeys();
