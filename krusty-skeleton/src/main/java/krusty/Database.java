@@ -185,7 +185,7 @@ public class Database {
         }
         ps.close();
         updateStorage(CookieName);
-        return "{\"status\": \"ok\", \"id\": " + palletId + "}}";
+        return "{\"status\": \"ok\", \"id\": " + palletId + "}";
     }
 
     private void updateStorage(String CookieName) throws SQLException {
