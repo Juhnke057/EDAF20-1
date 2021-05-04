@@ -148,7 +148,7 @@ public class Database {
     }
 
     private String createPallet(String CookieName) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO krusty.Pallets(TimeProduced,CookieName) VALUES(NOW(), ?)"  , Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO krusty.Pallets(TimeProduced,CookieName) VALUES(NOW(), ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, CookieName);
         ps.executeUpdate();
         int palletId = 0;
@@ -156,6 +156,7 @@ public class Database {
         if (generatedKeys.next()) {
             palletId = generatedKeys.getInt(1);
         }
+
         ps.close();
         updateStorage(CookieName);
         return "{\"status\": \"ok\", \"id\": " + palletId + "}";
@@ -181,6 +182,7 @@ public class Database {
         while (rs.next()) {
             ingredientAmount.put(rs.getString("IngredientName"), rs.getInt("Amount"));
         }
+
         return ingredientAmount;
     }
 }
