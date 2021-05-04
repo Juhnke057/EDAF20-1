@@ -78,6 +78,7 @@ public class Database {
 
     private Map<String, String> retrieveConditions(Request req) {
         Map<String, String> conditions = new HashMap<>();
+
         for (var param : Map.of("cookie", "Pallets.CookieName = ", "from", "Pallets.TimeProduced >= ", "to", "Pallets.TimeProduced <= ", "blocked", "BlockedOrNot = ").entrySet()) {
             if (req.queryParams(param.getKey()) != null) {
                 conditions.put(param.getValue(), req.queryParams(param.getKey()));
@@ -151,6 +152,7 @@ public class Database {
         PreparedStatement ps = connection.prepareStatement("INSERT INTO krusty.Pallets(TimeProduced,CookieName) VALUES(NOW(), ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, CookieName);
         ps.executeUpdate();
+
         int palletId = 0;
         ResultSet generatedKeys = ps.getGeneratedKeys();
         if (generatedKeys.next()) {
@@ -166,6 +168,7 @@ public class Database {
         Map<String, Integer> ingredientAmount = retrieveIngredients(CookieName);
 
         PreparedStatement ps = connection.prepareStatement(" UPDATE krusty.Storage SET StockAmount = StockAmount - 54*? WHERE IngredientName = ?");
+
         for (Map.Entry<String, Integer> entry : ingredientAmount.entrySet()) {
             ps.setInt(1, entry.getValue());
             ps.setString(2, entry.getKey());
@@ -176,9 +179,11 @@ public class Database {
 
     private Map<String, Integer> retrieveIngredients(String CookieName) throws SQLException {
         Map<String, Integer> ingredientAmount = new HashMap<>();
+
         PreparedStatement ps = connection.prepareStatement("SELECT IngredientName, Amount FROM krusty.Recipe WHERE CookieName = ?");
         ps.setString(1, CookieName);
         ResultSet rs = ps.executeQuery();
+
         while (rs.next()) {
             ingredientAmount.put(rs.getString("IngredientName"), rs.getInt("Amount"));
         }
