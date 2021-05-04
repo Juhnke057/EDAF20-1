@@ -56,6 +56,40 @@ public class Database {
         return executeQuery(sql, "recipes");
     }
 
+    public String getPallets(Request req, Response res) {
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT Pallets.PalletNbr AS id, Pallets.CookieName AS cookie, Pallets.TimeProduced AS production_date, Orders.CustomerName AS customer,  IF(BlockedOrNot, 'yes', 'no') AS blocked\n"
+                        + "FROM krusty.Pallets\n"
+                        + "LEFT JOIN krusty.Orders ON Orders.PalletNbr = Pallets.PalletNbr\n"
+        );
+
+        Map<String, String> conditions = retrieveConditions(req);
+
+        if (conditions.size() > 0) {
+            addConditionsToQuery(sql, conditions);
+        }
+
+        return executeQuery(sql.toString(), "pallets");
+    }
+
+    private void addConditionsToQuery(StringBuilder sql, Map<String, String> conditions) {
+        sql.append("WHERE ");
+        StringJoiner conditionJoiner = new StringJoiner(" AND ");
+        conditions.forEach((key, value) -> conditionJoiner.add(key + "'" + value + "'"));
+        sql.append(conditionJoiner.toString()).append(";");
+    }
+
+    private Map<String, String> retrieveConditions(Request req) {
+        Map<String, String> conditions = new HashMap<>();
+        for (var param : Map.of("cookie", "Pallets.CookieName = ", "from", "Pallets.TimeProduced >= ", "to", "Pallets.TimeProduced <= ", "blocked", "BlockedOrNot = ").entrySet()) {
+            if (req.queryParams(param.getKey()) != null) {
+                conditions.put(param.getValue(), req.queryParams(param.getKey()));
+            }
+        }
+        return conditions;
+    }
+
     private static String executeQuery(String sql, String table) {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
@@ -64,63 +98,6 @@ public class Database {
             exception.printStackTrace();
             return Jsonizer.anythingToJson(exception.getMessage(), "status");
         }
-    }
-
-    public String getPallets(Request req, Response res) {
-        String sql = "SELECT PalletNbr AS id, CookieName AS cookie,TimeProduced AS production_date,CustomerName AS customer, IF(BlockedOrNot, 'yes', 'no') AS blocked\n" +
-                "FROM krusty.Pallets\n" +
-                "LEFT JOIN krusty.Orders ON Pallets.PalletNbr = Orders.PalletNbr\n" +
-                "LEFT JOIN Customer ON Orders.CustomerName = Customer.CustomerName";
-
-        ArrayList<String> list = new ArrayList<>();
-        String json = "";
-        String from = req.queryParams("from");
-        String cookie = req.queryParams("cookie");
-        String to = req.queryParams("to");
-        String blocked = req.queryParams("blocked");
-
-        if (to != null || from != null || cookie != null || blocked != null) {
-            sql += "WHERE ";
-        }
-        if (to != null) {
-            if (list.size() > 0) {
-                sql += "AND ";
-                sql += "production_date <= ? ";
-                list.add(to);
-            }
-        }
-        if (from != null) {
-            sql = "production_date >= ? ";
-            list.add(from);
-        }
-        if (cookie != null) {
-            if (list.size() > 0) {
-                sql += "AND ";
-                sql += "cookie = ? ";
-                list.add(cookie);
-            }
-        }
-        if (blocked != null) {
-            if (list.size() > 0)
-                sql += "AND ";
-            sql += "blocked = ? ";
-            list.add(blocked);
-        }
-       //  return executeQuery(sql, "pallets");
-        //}
-      try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            for (int i = 0; i < list.size(); i++) {
-                ps.setString(i + 1, list.get(i));
-            }
-            ResultSet rs = ps.executeQuery();
-            return Jsonizer.toJson(rs, "pallets");
-        } catch (SQLException e) {
-            System.err.println(e);
-            e.printStackTrace();
-            return  Jsonizer.anythingToJson("error", "status");
-        }
-
     }
 
     public String reset(Request req, Response res) throws IOException, SQLException {
