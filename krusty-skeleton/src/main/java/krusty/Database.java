@@ -145,9 +145,9 @@ public class Database {
     }
 
     private boolean cookieExist(String CookieName) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT CookieName FROM krusty.Cookies WHERE CookieName = ?");
-        preparedStatement.setString(1, CookieName);
-        ResultSet rs = preparedStatement.executeQuery();
+        PreparedStatement ps = connection.prepareStatement("SELECT CookieName FROM krusty.Cookies WHERE CookieName = ?");
+        ps.setString(1, CookieName);
+        ResultSet rs = ps.executeQuery();
         return rs.next();
     }
 
@@ -168,11 +168,11 @@ public class Database {
     private void updateStorage(String CookieName) throws SQLException {
         Map<String, Integer> ingredientAmount = retrieveIngredients(CookieName);
 
-        PreparedStatement prepareStatement = connection.prepareStatement(" UPDATE krusty.Storage SET StockAmount = StockAmount - 54*? WHERE IngredientName = ?");
+        PreparedStatement ps = connection.prepareStatement(" UPDATE krusty.Storage SET StockAmount = StockAmount - 54*? WHERE IngredientName = ?");
         for (Map.Entry<String, Integer> entry : ingredientAmount.entrySet()) {
-            prepareStatement.setInt(1, entry.getValue());
-            prepareStatement.setString(2, entry.getKey());
-            prepareStatement.executeUpdate();
+            ps.setInt(1, entry.getValue());
+            ps.setString(2, entry.getKey());
+            ps.executeUpdate();
         }
 
     }
