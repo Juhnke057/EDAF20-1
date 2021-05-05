@@ -142,11 +142,10 @@ public class Database {
     }
 
     private boolean cookieExist(String CookieName) throws SQLException {
-        ResultSet rs;
-        try (PreparedStatement ps = connection.prepareStatement("SELECT CookieName FROM krusty.Cookies WHERE CookieName = ?")) {
-            ps.setString(1, CookieName);
-            rs = ps.executeQuery();
-        }
+        PreparedStatement ps = connection.prepareStatement("SELECT CookieName FROM krusty.Cookies WHERE CookieName = ?");
+        ps.setString(1, CookieName);
+        ResultSet rs = ps.executeQuery();
+
         return rs.next();
     }
 
