@@ -142,37 +142,42 @@ public class Database {
     }
 
     private boolean cookieExist(String CookieName) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT CookieName FROM krusty.Cookies WHERE CookieName = ?");
-        ps.setString(1, CookieName);
-        ResultSet rs = ps.executeQuery();
+        ResultSet rs;
+        try (PreparedStatement ps = connection.prepareStatement("SELECT CookieName FROM krusty.Cookies WHERE CookieName = ?")) {
+            ps.setString(1, CookieName);
+            rs = ps.executeQuery();
+        }
         return rs.next();
     }
 
     private String createPallet(String CookieName) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO krusty.Pallets(TimeProduced,CookieName) VALUES(NOW(), ?)", Statement.RETURN_GENERATED_KEYS);
-        ps.setString(1, CookieName);
-        ps.executeUpdate();
 
         int palletId = 0;
-        ResultSet generatedKeys = ps.getGeneratedKeys();
-        if (generatedKeys.next()) {
-            palletId = generatedKeys.getInt(1);
+
+        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO krusty.Pallets(TimeProduced,CookieName) VALUES(NOW(), ?)", Statement.RETURN_GENERATED_KEYS);) {
+            ps.setString(1, CookieName);
+            ps.executeUpdate();
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                palletId = generatedKeys.getInt(1);
+            }
         }
 
-        ps.close();
         updateStorage(CookieName);
+
         return "{\"status\": \"ok\", \"id\": " + palletId + "}";
     }
 
     private void updateStorage(String CookieName) throws SQLException {
         Map<String, Integer> ingredientAmount = retrieveIngredients(CookieName);
 
-        PreparedStatement ps = connection.prepareStatement(" UPDATE krusty.Storage SET StockAmount = StockAmount - 54*? WHERE IngredientName = ?");
+        try (PreparedStatement ps = connection.prepareStatement(" UPDATE krusty.Storage SET StockAmount = StockAmount - 54*? WHERE IngredientName = ?")) {
 
-        for (Map.Entry<String, Integer> entry : ingredientAmount.entrySet()) {
-            ps.setInt(1, entry.getValue());
-            ps.setString(2, entry.getKey());
-            ps.executeUpdate();
+            for (Map.Entry<String, Integer> entry : ingredientAmount.entrySet()) {
+                ps.setInt(1, entry.getValue());
+                ps.setString(2, entry.getKey());
+                ps.executeUpdate();
+            }
         }
 
     }
@@ -180,12 +185,14 @@ public class Database {
     private Map<String, Integer> retrieveIngredients(String CookieName) throws SQLException {
         Map<String, Integer> ingredientAmount = new HashMap<>();
 
-        PreparedStatement ps = connection.prepareStatement("SELECT IngredientName, Amount FROM krusty.Recipe WHERE CookieName = ?");
-        ps.setString(1, CookieName);
-        ResultSet rs = ps.executeQuery();
+        try (PreparedStatement ps = connection.prepareStatement("SELECT IngredientName, Amount FROM krusty.Recipe WHERE CookieName = ?")) {
+            ps.setString(1, CookieName);
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
-            ingredientAmount.put(rs.getString("IngredientName"), rs.getInt("Amount"));
+            while (rs.next()) {
+                ingredientAmount.put(rs.getString("IngredientName"), rs.getInt("Amount"));
+            }
+
         }
 
         return ingredientAmount;
