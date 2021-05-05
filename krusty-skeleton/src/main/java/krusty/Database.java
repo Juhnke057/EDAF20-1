@@ -97,7 +97,7 @@ public class Database {
         }
     }
 
-    public String reset(Request req, Response res) throws IOException, SQLException {
+    public String reset(Request req, Response res) throws SQLException {
         setForeignKeyCheck(false);
         truncateTables();
         insertDataIntoTables();
