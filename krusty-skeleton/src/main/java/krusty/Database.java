@@ -31,24 +31,24 @@ public class Database {
     }
 
     public String getCustomers(Request req, Response res) {
-        String sql = "SELECT CustomerName AS name, CustomerAddress as address FROM krusty.Customer";
+        String sql = "SELECT CustomerName AS name, CustomerAddress as address FROM " + database + ".Customer";
         return executeQuery(sql, "customers");
     }
 
     public String getRawMaterials(Request req, Response res) {
-        String sql = "SELECT IngredientName AS name, StockAmount AS amount, Unit AS unit FROM krusty.Storage";
+        String sql = "SELECT IngredientName AS name, StockAmount AS amount, Unit AS unit FROM " + database + ".Storage";
         return executeQuery(sql, "raw-materials");
     }
 
     public String getCookies(Request req, Response res) {
-        String sql = "SELECT CookieName AS name FROM krusty.cookies";
+        String sql = "SELECT CookieName AS name FROM " + database + ".cookies";
         return executeQuery(sql, "cookies");
     }
 
     public String getRecipes(Request req, Response res) {
         String sql = "SELECT CookieName AS cookie, Recipe.IngredientName AS raw_material, Amount AS amount, Storage.Unit AS unit\n"
-                + "FROM krusty.Recipe\n"
-                + "INNER JOIN krusty.Storage ON Recipe.IngredientName = Storage.IngredientName";
+                + "FROM " + database + ".Recipe\n"
+                + "INNER JOIN " + database + ".Storage ON Recipe.IngredientName = Storage.IngredientName";
         return executeQuery(sql, "recipes");
     }
 
@@ -56,8 +56,8 @@ public class Database {
 
         StringBuilder sql = new StringBuilder(
                 "SELECT Pallets.PalletNbr AS id, Pallets.CookieName AS cookie, Pallets.TimeProduced AS production_date, Orders.CustomerName AS customer,  IF(BlockedOrNot, 'yes', 'no') AS blocked\n"
-                        + "FROM krusty.Pallets\n"
-                        + "LEFT JOIN krusty.Orders ON Orders.PalletNbr = Pallets.PalletNbr\n"
+                        + "FROM " + database + ".Pallets\n"
+                        + "LEFT JOIN " + database + ".Orders ON Orders.PalletNbr = Pallets.PalletNbr\n"
         );
 
         Map<String, String> conditions = retrieveConditions(req);
@@ -114,7 +114,7 @@ public class Database {
 
     private void truncateTables() throws SQLException {
         for (String table : Arrays.asList("Customer", "Cookies", "Storage", "Recipe", "Pallets")) {
-            connection.createStatement().executeUpdate("TRUNCATE TABLE krusty." + table + ";");
+            connection.createStatement().executeUpdate("TRUNCATE TABLE " + database + "." + table + ";");
         }
     }
 
@@ -142,7 +142,7 @@ public class Database {
     }
 
     private boolean cookieExist(String CookieName) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT CookieName FROM krusty.Cookies WHERE CookieName = ?");
+        PreparedStatement ps = connection.prepareStatement("SELECT CookieName FROM " + database + ".Cookies WHERE CookieName = ?");
         ps.setString(1, CookieName);
         ResultSet rs = ps.executeQuery();
 
@@ -153,7 +153,7 @@ public class Database {
 
         int palletId = 0;
 
-        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO krusty.Pallets(TimeProduced,CookieName) VALUES(NOW(), ?)", Statement.RETURN_GENERATED_KEYS);) {
+        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO " + database + ".Pallets(TimeProduced,CookieName) VALUES(NOW(), ?)", Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, CookieName);
             ps.executeUpdate();
             ResultSet generatedKeys = ps.getGeneratedKeys();
@@ -170,7 +170,7 @@ public class Database {
     private void updateStorage(String CookieName) throws SQLException {
         Map<String, Integer> ingredientAmount = retrieveIngredients(CookieName);
 
-        try (PreparedStatement ps = connection.prepareStatement(" UPDATE krusty.Storage SET StockAmount = StockAmount - 54*? WHERE IngredientName = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement("UPDATE " + database + ".Storage SET StockAmount = StockAmount - 54*? WHERE IngredientName = ?")) {
 
             for (Map.Entry<String, Integer> entry : ingredientAmount.entrySet()) {
                 ps.setInt(1, entry.getValue());
@@ -184,7 +184,7 @@ public class Database {
     private Map<String, Integer> retrieveIngredients(String CookieName) throws SQLException {
         Map<String, Integer> ingredientAmount = new HashMap<>();
 
-        try (PreparedStatement ps = connection.prepareStatement("SELECT IngredientName, Amount FROM krusty.Recipe WHERE CookieName = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement("SELECT IngredientName, Amount FROM " + database + ".Recipe WHERE CookieName = ?")) {
             ps.setString(1, CookieName);
             ResultSet rs = ps.executeQuery();
 
