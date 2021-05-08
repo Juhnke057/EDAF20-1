@@ -126,7 +126,9 @@ public class Database {
 
     private String readFile(String file) {
         try {
-            return new String(Files.readAllBytes(Paths.get(file)));
+
+            String path = /*"krusty-skeleton/" + */  file;   /*ändra path beroende på var du lägger reset.sql filerna */
+            return new String(Files.readAllBytes(Paths.get(path)));
         } catch (IOException exception) {
             return exception.getMessage();
         }
