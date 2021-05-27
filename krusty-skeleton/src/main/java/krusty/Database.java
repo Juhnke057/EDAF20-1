@@ -62,7 +62,7 @@ public class Database {
 
         Map<String, String> conditions = retrieveConditions(req);
 
-        if (conditions.size() > 0) {
+        if (!conditions.isEmpty()) {
             addConditionsToQuery(sql, conditions);
         }
 
