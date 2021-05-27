@@ -31,22 +31,22 @@ public class Database {
     }
 
     public String getCustomers(Request req, Response res) {
-        String sql = "SELECT CustomerName AS name, CustomerAddress as address FROM " + database + ".Customer";
+        final String sql = "SELECT CustomerName AS name, CustomerAddress as address FROM " + database + ".Customer";
         return executeQuery(sql, "customers");
     }
 
     public String getRawMaterials(Request req, Response res) {
-        String sql = "SELECT IngredientName AS name, StockAmount AS amount, Unit AS unit FROM " + database + ".Storage";
+        final String sql = "SELECT IngredientName AS name, StockAmount AS amount, Unit AS unit FROM " + database + ".Storage";
         return executeQuery(sql, "raw-materials");
     }
 
     public String getCookies(Request req, Response res) {
-        String sql = "SELECT CookieName AS name FROM " + database + ".cookies";
+        final String sql = "SELECT CookieName AS name FROM " + database + ".cookies";
         return executeQuery(sql, "cookies");
     }
 
     public String getRecipes(Request req, Response res) {
-        String sql = "SELECT CookieName AS cookie, Recipe.IngredientName AS raw_material, Amount AS amount, Storage.Unit AS unit\n"
+        final String sql = "SELECT CookieName AS cookie, Recipe.IngredientName AS raw_material, Amount AS amount, Storage.Unit AS unit\n"
                 + "FROM " + database + ".Recipe\n"
                 + "INNER JOIN " + database + ".Storage ON Recipe.IngredientName = Storage.IngredientName";
         return executeQuery(sql, "recipes");
