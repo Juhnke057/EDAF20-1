@@ -72,7 +72,6 @@ public class Database {
     private void addConditionsToQuery(StringBuilder sql, Map<String, String> conditions) {
         StringJoiner conditionJoiner = new StringJoiner(" AND ");
         conditions.forEach((key, value) -> conditionJoiner.add(key + "'" + value + "'"));
-        sql.append(conditionJoiner.toString()).append(";");
         sql.append("WHERE ").append(conditionJoiner).append(";");
     }
 
