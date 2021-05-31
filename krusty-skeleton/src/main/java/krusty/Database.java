@@ -71,18 +71,24 @@ public class Database {
 
     private void addConditionsToQuery(StringBuilder sql, Map<String, String> conditions) {
         StringJoiner conditionJoiner = new StringJoiner(" AND ");
-        conditions.forEach((key, value) -> conditionJoiner.add(key + "'" + value + "'"));
+        conditions.forEach((key, value) -> conditionJoiner.add(key + value));
         sql.append("WHERE ").append(conditionJoiner).append(";");
     }
 
     private Map<String, String> retrieveConditions(Request req) {
         Map<String, String> conditions = new HashMap<>();
 
-        for (var param : Map.of("cookie", "Pallets.CookieName = ", "from", "Pallets.TimeProduced >= ", "to", "Pallets.TimeProduced <= ", "blocked", "BlockedOrNot = ").entrySet()) {
-            if (req.queryParams(param.getKey()) != null) {
-                conditions.put(param.getValue(), req.queryParams(param.getKey()));
+        Map.of("cookie", "Pallets.CookieName = ", "from", "Pallets.TimeProduced >= ", "to", "Pallets.TimeProduced <= ", "blocked", "BlockedOrNot IS ").forEach((key, query) -> {
+            var constraint = req.queryParams(key);
+
+            if (null != constraint) {
+                constraint = "BlockedOrNot IS ".equals(query) ? "yes".equals(constraint) ? "TRUE" : "NOT TRUE"
+                        : "'" + constraint + "'";
+
+                conditions.put(query, constraint);
             }
-        }
+        });
+
         return conditions;
     }
 
