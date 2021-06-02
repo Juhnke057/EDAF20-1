@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.util.*;
 
-
 public class Database {
 
     private static final String jdbcUsername = "root";
@@ -79,13 +78,13 @@ public class Database {
         Map<String, String> conditions = new HashMap<>();
 
         Map.of("cookie", "Pallets.CookieName = ", "from", "Pallets.TimeProduced >= ", "to", "Pallets.TimeProduced <= ", "blocked", "BlockedOrNot IS ").forEach((key, query) -> {
-            var constraint = req.queryParams(key);
+            var param = req.queryParams(key);
 
-            if (null != constraint) {
-                constraint = "BlockedOrNot IS ".equals(query) ? "yes".equals(constraint) ? "TRUE" : "NOT TRUE"
-                        : "'" + constraint + "'";
+            if (null != param) {
+                param = ("BlockedOrNot IS ".equals(query)) ? ("yes".equals(param) ? "TRUE" : "NOT TRUE")
+                        : ("'" + param + "'");
 
-                conditions.put(query, constraint);
+                conditions.put(query, param);
             }
         });
 
